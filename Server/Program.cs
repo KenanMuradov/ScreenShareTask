@@ -10,22 +10,22 @@ while (true)
 
     var result = await server.ReceiveAsync();
 
-    new Task(() => {
+    new Task(async () =>
+    {
+
         var remoteEP = result.RemoteEndPoint;
         while (true)
         {
-            for (int i = 0; i < 60; i++)
-            {
-                var img = TakeScreenShot();
+            await Task.Delay(35);
+            var img = TakeScreenShot();
 
-                var bytesImg = ImageToByte(img);
+            var bytesImg = ImageToByte(img);
 
 
-                var myArray = bytesImg.Chunk(ushort.MaxValue - 29);
+            var myArray = bytesImg.Chunk(ushort.MaxValue - 29);
 
-                foreach (var array in myArray)
-                    server.SendAsync(array, array.Length, remoteEP);
-            }
+            foreach (var array in myArray)
+                await server.SendAsync(array, array.Length, remoteEP);
         }
 
     }).Start();
@@ -35,7 +35,7 @@ byte[] ImageToByte(Image img)
 {
     using (var stream = new MemoryStream())
     {
-        img.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+        img.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
         return stream.ToArray();
     }
 }
