@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
-UdpClient server = new UdpClient(45678);
+UdpClient server = new UdpClient( 45678);
 
 while (true)
 {
@@ -16,7 +16,7 @@ while (true)
         var remoteEP = result.RemoteEndPoint;
         while (true)
         {
-            await Task.Delay(35);
+            await Task.Delay(20);
             var img = TakeScreenShot();
 
             var bytesImg = ImageToByte(img);
